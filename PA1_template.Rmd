@@ -68,3 +68,19 @@ diffMedian <- newMedianSteps - medianSteps
 The difference in average number of steps per day without and with NA values resolved = `r diffMean`  
 The difference in median number of steps per day without and with NA values resolved = `r diffMedian`  
 
+As can be seen in the following plots, the pattern for weekdays and weekends are quite different:
+```{r, fig.height = 10}
+Sys.setlocale("LC_TIME", "US")
+newActivity$day <- weekdays(newActivity$date)
+noWeekend <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+weekend <- c("Saturday", "Sunday")
+newActivity$dayType <- factor(c("weekend", "weekday"))
+newActivity[newActivity$day %in% noWeekend,]$dayType <- as.factor("weekday")
+newActivity[newActivity$day %in% weekend,]$dayType <- as.factor("weekend")
+par(mfrow = c(2, 1))
+plot(aggregate(steps~interval, data = newActivity[newActivity$dayType == "weekday",], mean), type = "l")
+plot(aggregate(steps~interval, data = newActivity[newActivity$dayType == "weekend",], mean), type = "l")
+```
+
+
+

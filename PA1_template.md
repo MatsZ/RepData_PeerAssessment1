@@ -89,3 +89,29 @@ diffMedian <- newMedianSteps - medianSteps
 The difference in average number of steps per day without and with NA values resolved = 0  
 The difference in median number of steps per day without and with NA values resolved = 1.1886792  
 
+As can be seen in the following plots, the pattern for weekdays and weekends are quite different:
+
+```r
+Sys.setlocale("LC_TIME", "US")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
+newActivity$day <- weekdays(newActivity$date)
+noWeekend <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+weekend <- c("Saturday", "Sunday")
+newActivity$dayType <- factor(c("weekend", "weekday"))
+newActivity[newActivity$day %in% noWeekend,]$dayType <- as.factor("weekday")
+newActivity[newActivity$day %in% weekend,]$dayType <- as.factor("weekend")
+par(mfrow = c(2, 1))
+plot(aggregate(steps~interval, data = newActivity[newActivity$dayType == "weekday",], mean), type = "l")
+plot(aggregate(steps~interval, data = newActivity[newActivity$dayType == "weekend",], mean), type = "l")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
+
+
