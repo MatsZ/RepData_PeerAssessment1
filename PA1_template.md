@@ -48,6 +48,8 @@ The interval with highest average steps per day = 835
 
 ## Imputing missing values
 
+The missing values will be resolved by imputing the previously computed mean  
+steps per interval (not very fast code, sorry).
 
 ```r
 print(nrow(activity) - sum(complete.cases(activity)))
