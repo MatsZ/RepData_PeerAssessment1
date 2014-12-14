@@ -1,16 +1,12 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
 Load the data and transform date factor to proper format:
 
-```{r}
+
+```r
 activity <- read.csv("activity.csv")
 activity$date <- as.Date(activity$date)
 ```
@@ -18,30 +14,50 @@ activity$date <- as.Date(activity$date)
 
 ## What is mean total number of steps taken per day?
 
-```{r}
+
+```r
 stepsPerDay <- aggregate(steps~date, data = activity, sum)
 hist(stepsPerDay$steps)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 meanSteps <- mean(stepsPerDay$steps)
 medianSteps <- median(stepsPerDay$steps)
 ```
-The average number of steps per day = `r meanSteps`  
-The median number of steps per day = `r medianSteps`  
+The average number of steps per day = 1.0766189\times 10^{4}  
+The median number of steps per day = 10765  
 
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 stepsPerInterval <- aggregate(steps~interval, data = activity, mean)
 plot(stepsPerInterval, type = "l")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 maxStepsInterval <- stepsPerInterval[stepsPerInterval$steps == max(stepsPerInterval$steps), 1]
 ```
-The interval with highest average steps per day = `r maxStepsInterval`  
+The interval with highest average steps per day = 835  
 
 
 ## Imputing missing values
 
-```{r}
+
+```r
 print(nrow(activity) - sum(complete.cases(activity)))
+```
+
+```
+## [1] 2304
+```
+
+```r
 newActivity <- activity
 for (row in 1:nrow(newActivity)) {
     if (is.na(newActivity[row,]$steps)) {
@@ -51,20 +67,25 @@ for (row in 1:nrow(newActivity)) {
 
 newStepsPerDay <- aggregate(steps~date, data = newActivity, sum)
 hist(newStepsPerDay$steps)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+```r
 newMeanSteps <- mean(newStepsPerDay$steps)
 newMedianSteps <- median(newStepsPerDay$steps)
-
 ```
-The average number of steps per day when NA values are resolved = `r meanSteps`  
-The median number of steps per day when NA values are resolved = `r medianSteps`  
+The average number of steps per day when NA values are resolved = 1.0766189\times 10^{4}  
+The median number of steps per day when NA values are resolved = 10765  
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 diffMean <- newMeanSteps - meanSteps
 diffMedian <- newMedianSteps - medianSteps
 ```
-The difference in average number of steps per day without and with NA values resolved = `r diffMean`  
-The difference in median number of steps per day without and with NA values resolved = `r diffMedian`  
+The difference in average number of steps per day without and with NA values resolved = 0  
+The difference in median number of steps per day without and with NA values resolved = 1.1886792  
 
